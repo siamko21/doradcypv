@@ -1,0 +1,46 @@
+---
+const steps = [
+  {
+    num: "1",
+    title: "Wypełnij formularz",
+    desc: "Podaj podstawowe dane — imię, telefon i kod pocztowy. Zajmuje to 30 sekund."
+  },
+  {
+    num: "2",
+    title: "Bezpłatna konsultacja",
+    desc: "Nasz doradca zadzwoni w ciągu godziny. Omówimy Twoje potrzeby i dobierzemy moc instalacji."
+  },
+  {
+    num: "3",
+    title: "Montaż i oszczędności",
+    desc: "Instalacja w kilka tygodni. Od pierwszego dnia produkujesz własny prąd i oszczędzasz."
+  }
+];
+---
+
+<section id="jak-to-dziala" class="py-16 sm:py-24 bg-brand-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <h2 class="font-heading font-extrabold text-3xl sm:text-4xl mb-4">Jak to działa?</h2>
+      <p class="font-body text-slate-600 text-lg max-w-2xl mx-auto">Trzy proste kroki do własnej energii</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+      {steps.map((s) => (
+        <div class="relative text-center">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-brand text-white font-heading font-extrabold text-2xl rounded-full mb-6 shadow-lg shadow-stone-300/50">
+            {s.num}
+          </div>
+          <h3 class="font-heading font-bold text-xl mb-3">{s.title}</h3>
+          <p class="font-body text-slate-600 text-sm leading-relaxed max-w-xs mx-auto">{s.desc}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="text-center mt-12">
+      <a href="#kontakt" class="inline-flex items-center px-8 py-4 bg-brand-primary hover:bg-brand-primary-dark text-white font-heading font-bold text-base rounded-xl transition-all duration-200 shadow-lg shadow-stone-300/50">
+        Zamów bezpłatną wycenę
+      </a>
+    </div>
+  </div>
+</section>

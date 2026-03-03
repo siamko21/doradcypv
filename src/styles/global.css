@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --font-heading: "Plus Jakarta Sans", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+
+  --color-brand-primary: #7B8B6F;
+  --color-brand-primary-dark: #5C6B50;
+  --color-brand-secondary: #5C6B50;
+  --color-brand-accent: #3D3D3D;
+  --color-brand-accent-dark: #2D2D2D;
+  --color-brand-dark: #1A1A2E;
+  --color-brand-light: #E8EDE4;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-brand-dark);
+  background-color: #F3F4F6;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #7B8B6F 0%, #5C6B50 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-brand {
+  background: linear-gradient(135deg, #7B8B6F 0%, #5C6B50 50%, #4A5740 100%);
+}
+
+.bg-gradient-accent {
+  background: linear-gradient(135deg, #7B8B6F 0%, #5C6B50 50%, #3D3D3D 100%);
+}

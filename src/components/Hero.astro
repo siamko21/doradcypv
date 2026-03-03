@@ -1,0 +1,153 @@
+---
+---
+
+<section id="kontakt" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+  <!-- Background -->
+  <div class="absolute inset-0 bg-gradient-to-br from-brand-light via-white to-stone-100"></div>
+  <div class="absolute top-20 right-0 w-96 h-96 bg-brand-primary/10 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 left-0 w-80 h-80 bg-brand-accent/10 rounded-full blur-3xl"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 w-full">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+      <!-- Left: Copy -->
+      <div>
+        <div class="inline-flex items-center gap-2 bg-brand-light text-brand-secondary font-body text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+          </svg>
+          Niezależni eksperci od fotowoltaiki
+        </div>
+
+        <h1 class="font-heading font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6">
+          Obniż rachunki za prąd
+          <span class="text-gradient"> nawet o 90%</span>
+        </h1>
+
+        <p class="font-body text-lg sm:text-xl text-slate-600 mb-8 max-w-xl">
+          Fotowoltaika z magazynem energii dla domów jednorodzinnych. Pomagamy z dofinansowaniem. <strong class="text-brand-dark">Bezpłatna wycena w 24h.</strong>
+        </p>
+
+        <!-- Trust badges mobile -->
+        <div class="flex flex-wrap gap-4 mb-8 lg:mb-0">
+          <div class="flex items-center gap-2 text-sm text-slate-600">
+            <svg class="w-5 h-5 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+            Najniższa cena
+          </div>
+          <div class="flex items-center gap-2 text-sm text-slate-600">
+            <svg class="w-5 h-5 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+            Oddzwonimy w 1h
+          </div>
+          <div class="flex items-center gap-2 text-sm text-slate-600">
+            <svg class="w-5 h-5 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+            Pomoc z dotacjami
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="bg-white rounded-3xl shadow-xl shadow-stone-200/50 p-6 sm:p-8 border border-stone-200">
+        <div class="text-center mb-6">
+          <h2 class="font-heading font-bold text-xl sm:text-2xl text-brand-dark mb-1">Zamów bezpłatną wycenę</h2>
+          <p class="font-body text-sm text-slate-500">Oddzwonimy w ciągu godziny</p>
+        </div>
+
+        <div id="form-success" class="hidden text-center py-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-light rounded-full mb-4">
+            <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-xl text-brand-dark mb-2">Dziękujemy!</h3>
+          <p class="font-body text-slate-600 text-sm">Otrzymaliśmy Twoje zgłoszenie. Oddzwonimy w ciągu godziny.</p>
+        </div>
+
+        <form action="https://formspree.io/f/mbdanlkp" method="POST" class="space-y-4" id="lead-form">
+          <div>
+            <label for="name" class="block font-body text-sm font-medium text-slate-700 mb-1">Imię</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Jan"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-primary focus:ring-4 focus:ring-brand-light outline-none transition-all font-body text-sm"
+            />
+          </div>
+
+          <div>
+            <label for="phone" class="block font-body text-sm font-medium text-slate-700 mb-1">Telefon</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              required
+              placeholder="+48 600 000 000"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-primary focus:ring-4 focus:ring-brand-light outline-none transition-all font-body text-sm"
+            />
+          </div>
+
+          <div>
+            <label for="zip" class="block font-body text-sm font-medium text-slate-700 mb-1">Kod pocztowy</label>
+            <input
+              type="text"
+              id="zip"
+              name="zip"
+              required
+              placeholder="60-001"
+              pattern="[0-9]{2}-[0-9]{3}"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-primary focus:ring-4 focus:ring-brand-light outline-none transition-all font-body text-sm"
+            />
+          </div>
+
+          <div>
+            <label for="roof" class="block font-body text-sm font-medium text-slate-700 mb-1">Typ dachu</label>
+            <select
+              id="roof"
+              name="roof"
+              required
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-primary focus:ring-4 focus:ring-brand-light outline-none transition-all font-body text-sm bg-white"
+            >
+              <option value="" disabled selected>Wybierz typ dachu</option>
+              <option value="skosny">Skośny (dwuspadowy)</option>
+              <option value="plaski">Płaski</option>
+              <option value="wielospadowy">Wielospadowy</option>
+              <option value="inny">Inny</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full px-6 py-4 bg-brand-primary hover:bg-brand-primary-dark text-white font-heading font-bold text-base rounded-xl transition-all duration-200 shadow-lg shadow-stone-300/50 hover:shadow-xl hover:shadow-stone-300/50 cursor-pointer"
+          >
+            Zamów bezpłatną wycenę
+          </button>
+
+          <p class="text-center text-xs text-slate-400 font-body">
+            Twoje dane są bezpieczne. Nie udostępniamy ich nikomu.
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('lead-form') as HTMLFormElement;
+  const success = document.getElementById('form-success');
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+    if (res.ok) {
+      form.classList.add('hidden');
+      success?.classList.remove('hidden');
+    }
+  });
+</script>
