@@ -122,6 +122,20 @@
             </select>
           </div>
 
+          <!-- GDPR consent checkbox -->
+          <div class="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="consent"
+              name="consent"
+              required
+              class="mt-0.5 w-4 h-4 shrink-0 rounded border-slate-300 text-brand-primary focus:ring-brand-primary focus:ring-2 cursor-pointer"
+            />
+            <label for="consent" class="font-body text-xs text-slate-500 leading-relaxed cursor-pointer">
+              Wyrażam zgodę na przetwarzanie moich danych osobowych przez DoradcyPV w celu przygotowania wyceny instalacji fotowoltaicznej i kontaktu w sprawie oferty. Zapoznałem/am się z <a href="/polityka-prywatnosci" class="text-brand-primary hover:underline">polityką prywatności</a>.
+            </label>
+          </div>
+
           <button
             type="submit"
             class="w-full px-6 py-4 bg-brand-primary hover:bg-brand-primary-dark text-white font-heading font-bold text-base rounded-xl transition-all duration-200 shadow-lg shadow-stone-300/50 hover:shadow-xl hover:shadow-stone-300/50 cursor-pointer"
