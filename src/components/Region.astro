@@ -1,8 +1,11 @@
 ---
 const regions = [
-  { name: "Wielkopolska", cities: "Poznań, Kalisz, Konin, Piła, Leszno" },
-  { name: "Kujawy", cities: "Bydgoszcz, Toruń, Inowrocław, Włocławek" },
-  { name: "Pomorze", cities: "Gdańsk, Gdynia, Sopot, Słupsk, Starogard" }
+  { name: "Mazowieckie" },
+  { name: "Wielkopolskie", cities: "Poznań, Kalisz, Konin, Piła, Leszno" },
+  { name: "Kujawsko-Pomorskie", cities: "Bydgoszcz, Toruń, Inowrocław, Włocławek" },
+  { name: "Łódzkie" },
+  { name: "Pomorskie", cities: "Gdańsk, Gdynia, Sopot, Słupsk, Starogard" },
+  { name: "Zachodniopomorskie" }
 ];
 ---
 
@@ -10,7 +13,7 @@ const regions = [
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-14">
       <h2 class="font-heading font-extrabold text-3xl sm:text-4xl mb-4">Działamy lokalnie</h2>
-      <p class="font-body text-white/70 text-lg max-w-2xl mx-auto">Znamy Twój region. Obsługujemy trzy województwa — jesteśmy blisko Ciebie.</p>
+      <p class="font-body text-white/70 text-lg max-w-2xl mx-auto">Znamy Twój region. Obsługujemy sześć województw — jesteśmy blisko Ciebie.</p>
     </div>
 
     <div class="grid md:grid-cols-3 gap-8">
@@ -23,7 +26,7 @@ const regions = [
             </svg>
             <h3 class="font-heading font-bold text-xl">{r.name}</h3>
           </div>
-          <p class="font-body text-white/70 text-sm">{r.cities}</p>
+          <p class="font-body text-white/70 text-sm">{r.cities ?? "Obsługujemy cały region"}</p>
         </div>
       ))}
     </div>
