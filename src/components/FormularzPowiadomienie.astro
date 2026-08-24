@@ -1,0 +1,151 @@
+---
+---
+
+<section id="powiadomienie" class="py-16 sm:py-24 bg-gradient-brand text-white">
+  <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-stone-200 text-brand-dark">
+      <div class="text-center mb-6">
+        <h2 class="font-heading font-bold text-xl sm:text-2xl text-brand-dark mb-2">Powiadom mnie o starcie naboru</h2>
+        <p class="font-body text-sm text-slate-600">
+          Napiszemy w dniu, w którym NFOŚiGW ogłosi start naboru PME2. Bez spamu, bez telefonów sprzedażowych.
+        </p>
+      </div>
+
+      <div id="powiadom-success" class="hidden text-center py-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-light rounded-full mb-4">
+          <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-brand-dark mb-2">Dziękujemy!</h3>
+        <p class="font-body text-slate-600 text-sm">Odezwiemy się w dniu startu naboru.</p>
+      </div>
+
+      <form id="powiadom-form" class="space-y-4">
+        <div>
+          <label for="powiadom-telefon" class="block font-body text-sm font-medium text-slate-700 mb-1">
+            Telefon <span class="text-slate-400 font-normal">(podaj telefon lub e-mail)</span>
+          </label>
+          <input
+            type="tel"
+            id="powiadom-telefon"
+            name="telefon"
+            placeholder="+48 600 000 000"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-primary focus:ring-4 focus:ring-brand-light outline-none transition-all font-body text-sm"
+          />
+        </div>
+
+        <div>
+          <label for="powiadom-email" class="block font-body text-sm font-medium text-slate-700 mb-1">
+            E-mail <span class="text-slate-400 font-normal">(podaj telefon lub e-mail)</span>
+          </label>
+          <input
+            type="email"
+            id="powiadom-email"
+            name="email"
+            placeholder="jan@example.com"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-primary focus:ring-4 focus:ring-brand-light outline-none transition-all font-body text-sm"
+          />
+        </div>
+
+        <div>
+          <label for="powiadom-kod" class="block font-body text-sm font-medium text-slate-700 mb-1">
+            Kod pocztowy <span class="text-slate-400 font-normal">(opcjonalnie)</span>
+          </label>
+          <input
+            type="text"
+            id="powiadom-kod"
+            name="zip"
+            placeholder="60-001"
+            pattern="[0-9]{2}-[0-9]{3}"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-primary focus:ring-4 focus:ring-brand-light outline-none transition-all font-body text-sm"
+          />
+        </div>
+
+        <p id="powiadom-blad" class="hidden text-sm text-red-600 font-body">
+          Podaj telefon albo e-mail — potrzebujemy przynajmniej jednego sposobu kontaktu.
+        </p>
+
+        <div class="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="powiadom-zgoda"
+            name="consent"
+            required
+            class="mt-0.5 w-4 h-4 shrink-0 rounded border-slate-300 text-brand-primary focus:ring-brand-primary focus:ring-2 cursor-pointer"
+          />
+          <label for="powiadom-zgoda" class="font-body text-xs text-slate-500 leading-relaxed cursor-pointer">
+            Wyrażam zgodę na przetwarzanie moich danych osobowych przez DoradcyPV w celu powiadomienia
+            o starcie naboru PME2. Zapoznałem/am się z <a href="/polityka-prywatnosci" class="text-brand-primary hover:underline">polityką prywatności</a>.
+          </label>
+        </div>
+
+        <!-- Pulapka na boty, ten sam wzorzec co formularz wyceny (Hero.astro) -->
+        <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+          <label for="powiadom-company">Nie wypełniaj tego pola</label>
+          <input type="text" id="powiadom-company" name="company" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full px-6 py-4 bg-brand-primary hover:bg-brand-primary-dark text-white font-heading font-bold text-base rounded-xl transition-all duration-200 shadow-lg cursor-pointer"
+        >
+          Powiadom mnie
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('powiadom-form') as HTMLFormElement;
+  const success = document.getElementById('powiadom-success');
+  const blad = document.getElementById('powiadom-blad');
+  const telefon = document.getElementById('powiadom-telefon') as HTMLInputElement;
+  const email = document.getElementById('powiadom-email') as HTMLInputElement;
+
+  const WEBHOOK = 'https://siamko21.app.n8n.cloud/webhook/doradcypv-pme2-powiadomienie';
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    blad?.classList.add('hidden');
+
+    if (!telefon.value.trim() && !email.value.trim()) {
+      blad?.classList.remove('hidden');
+      return;
+    }
+
+    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+    const napis = btn?.textContent ?? '';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Wysyłanie...';
+    }
+
+    const dane = new FormData(form);
+    let wyslane = false;
+
+    try {
+      const res = await fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(dane.entries())),
+      });
+      wyslane = res.ok;
+    } catch {
+      wyslane = false;
+    }
+
+    if (wyslane) {
+      form.classList.add('hidden');
+      success?.classList.remove('hidden');
+      return;
+    }
+
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = napis;
+    }
+    alert('Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę.');
+  });
+</script>

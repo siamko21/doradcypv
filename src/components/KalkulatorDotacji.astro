@@ -1,0 +1,207 @@
+---
+import { PME2 } from '../config/dotacje';
+
+const przykladyMocy = [2, 5, 10, 15, 20];
+---
+
+<section id="kalkulator" class="py-16 sm:py-24 bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <h2 class="font-heading font-extrabold text-3xl sm:text-4xl mb-4">Kalkulator dotacji PME2</h2>
+      <p class="font-body text-slate-600 text-lg">Sprawdź, na ile możesz liczyć i czy Twoja instalacja się kwalifikuje.</p>
+    </div>
+
+    <!-- Fallback bez JS: zawsze widoczna tabela progów, chowana gdy JS wystartuje -->
+    <div id="kalk-fallback" class="bg-brand-light rounded-2xl border border-stone-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-stone-300">
+              <th class="text-left font-heading font-semibold p-4">Moc PV</th>
+              <th class="text-left font-heading font-semibold p-4">Minimalna pojemność magazynu</th>
+            </tr>
+          </thead>
+          <tbody>
+            {przykladyMocy.map((moc) => (
+              <tr class="border-b border-stone-200 last:border-0">
+                <td class="p-4 font-body">{moc} kWp</td>
+                <td class="p-4 font-body">
+                  {Math.max(moc * PME2.wspolczynnikPojemnosci, PME2.minPojemnoscMagazynuKWh)} kWh
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="p-5 sm:p-6 border-t border-stone-300 space-y-1 font-body text-sm text-slate-700">
+        <p>Maksymalna dotacja na punkt poboru: <strong>{PME2.maxDotacja.toLocaleString('pl-PL')} zł</strong></p>
+        <p>W tym: magazyn energii do {PME2.skladowe.magazynEnergii.toLocaleString('pl-PL')} zł, premia za sprzęt europejski {PME2.skladowe.premiaSprzetEuropejski.toLocaleString('pl-PL')} zł, magazyn ciepła {PME2.skladowe.magazynCiepla.toLocaleString('pl-PL')} zł</p>
+        <p>Zawsze do {PME2.procentKosztow * 100}% kosztów kwalifikowanych poniesionych od {PME2.kosztyKwalifikowaneOd}</p>
+        <p class="text-xs text-slate-500 pt-2">Włącz JavaScript, żeby policzyć dokładną kwotę dla Twojej instalacji.</p>
+      </div>
+    </div>
+
+    <!-- Wersja interaktywna: odsłaniana przez skrypt niżej -->
+    <div id="kalk-interaktywny" hidden class="bg-brand-light rounded-2xl border border-stone-200 p-6 sm:p-8 space-y-6">
+      <div>
+        <label for="kalk-moc" class="flex justify-between font-body text-sm font-medium text-slate-700 mb-2">
+          <span>Moc instalacji PV</span>
+          <span id="kalk-moc-wartosc" class="font-heading font-bold text-brand-primary">6 kWp</span>
+        </label>
+        <input type="range" id="kalk-moc" min="2" max="20" step="0.5" value="6" class="w-full accent-brand-primary" />
+      </div>
+
+      <div>
+        <label for="kalk-pojemnosc" class="flex justify-between font-body text-sm font-medium text-slate-700 mb-2">
+          <span>Pojemność magazynu energii</span>
+          <span id="kalk-pojemnosc-wartosc" class="font-heading font-bold text-brand-primary">12 kWh</span>
+        </label>
+        <input type="range" id="kalk-pojemnosc" min="0" max="40" step="0.5" value="12" class="w-full accent-brand-primary" />
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <label class="flex items-center gap-2 font-body text-sm text-slate-700 cursor-pointer">
+          <input type="checkbox" id="kalk-europejski" class="w-4 h-4 rounded border-slate-300 text-brand-primary focus:ring-brand-primary" />
+          Sprzęt produkcji europejskiej
+        </label>
+        <label class="flex items-center gap-2 font-body text-sm text-slate-700 cursor-pointer">
+          <input type="checkbox" id="kalk-cieplo" class="w-4 h-4 rounded border-slate-300 text-brand-primary focus:ring-brand-primary" />
+          Magazyn ciepła (min. {PME2.minPojemnoscMagazynuCieplaDm3} dm³)
+        </label>
+      </div>
+
+      <div>
+        <label for="kalk-koszt" class="block font-body text-sm font-medium text-slate-700 mb-2">
+          Szacowany koszt inwestycji <span class="text-slate-400 font-normal">(opcjonalnie, do wyliczenia limitu {PME2.procentKosztow * 100}%)</span>
+        </label>
+        <input
+          type="number"
+          id="kalk-koszt"
+          min="0"
+          step="500"
+          placeholder="np. 45000"
+          class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-primary focus:ring-4 focus:ring-white outline-none transition-all font-body text-sm bg-white"
+        />
+      </div>
+
+      <div id="kalk-wynik" class="bg-white rounded-2xl p-6 border border-stone-200">
+        <p class="font-body text-sm text-slate-500 mb-1">Szacowana dotacja</p>
+        <p id="kalk-kwota" class="font-heading font-extrabold text-4xl text-brand-primary mb-4">0 zł</p>
+
+        <ul id="kalk-rozbicie" class="space-y-1 font-body text-sm text-slate-600 mb-4"></ul>
+
+        <div id="kalk-warunek" class="rounded-xl p-4 text-sm font-body mb-4"></div>
+
+        <p id="kalk-limit" class="text-xs text-slate-500"></p>
+
+        <div class="mt-4 pt-4 border-t border-stone-200">
+          <a href="#powiadomienie" class="inline-flex items-center justify-center w-full px-6 py-3.5 bg-brand-primary hover:bg-brand-primary-dark text-white font-heading font-semibold text-sm rounded-xl transition-all">
+            Powiadom mnie o starcie naboru
+          </a>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-500 font-body">
+        Wyliczenie ma charakter szacunkowy. Ostateczna kwota dotacji zależy od regulaminu naboru
+        i weryfikacji wniosku przez NFOŚiGW.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ PME2 }}>
+  const fallback = document.getElementById('kalk-fallback');
+  const interaktywny = document.getElementById('kalk-interaktywny');
+
+  const mocInput = document.getElementById('kalk-moc');
+  const pojemnoscInput = document.getElementById('kalk-pojemnosc');
+  const europejskiInput = document.getElementById('kalk-europejski');
+  const cieploInput = document.getElementById('kalk-cieplo');
+  const kosztInput = document.getElementById('kalk-koszt');
+
+  const mocWartosc = document.getElementById('kalk-moc-wartosc');
+  const pojemnoscWartosc = document.getElementById('kalk-pojemnosc-wartosc');
+  const kwotaEl = document.getElementById('kalk-kwota');
+  const rozbicieEl = document.getElementById('kalk-rozbicie');
+  const warunekEl = document.getElementById('kalk-warunek');
+  const limitEl = document.getElementById('kalk-limit');
+
+  const fmt = (n) => Math.round(n).toLocaleString('pl-PL') + ' zł';
+
+  let uzyty = false;
+  function zglosUzycieKalkulatora() {
+    if (uzyty) return;
+    uzyty = true;
+    if (typeof window.fbq === 'function') {
+      window.fbq('trackCustom', 'kalkulator_uzyty');
+    }
+  }
+
+  function przelicz(zglosUzycie) {
+    const moc = parseFloat(mocInput.value);
+    const pojemnosc = parseFloat(pojemnoscInput.value);
+    const europejski = europejskiInput.checked;
+    const cieplo = cieploInput.checked;
+    const koszt = kosztInput.value ? parseFloat(kosztInput.value) : null;
+
+    mocWartosc.textContent = `${moc} kWp`;
+    pojemnoscWartosc.textContent = `${pojemnosc} kWh`;
+
+    const minWymagana = Math.max(moc * PME2.wspolczynnikPojemnosci, PME2.minPojemnoscMagazynuKWh);
+    const warunekSpelniony = pojemnosc >= minWymagana;
+
+    const magazynEnergiaSkladowa = warunekSpelniony
+      ? Math.min(pojemnosc * PME2.stawkaMagazynEnergiiZaKWh, PME2.skladowe.magazynEnergii)
+      : 0;
+    const premiaEuropejska = warunekSpelniony && europejski ? PME2.skladowe.premiaSprzetEuropejski : 0;
+    const magazynCieplaKwota = warunekSpelniony && cieplo ? PME2.skladowe.magazynCiepla : 0;
+
+    const sumaSkladowych = magazynEnergiaSkladowa + premiaEuropejska + magazynCieplaKwota;
+    const limit30 = koszt !== null && koszt > 0 ? koszt * PME2.procentKosztow : Infinity;
+
+    const dotacjaFinalna = Math.min(sumaSkladowych, limit30, PME2.maxDotacja);
+
+    kwotaEl.textContent = fmt(dotacjaFinalna);
+
+    rozbicieEl.innerHTML = '';
+    const pozycje = [
+      ['Magazyn energii', magazynEnergiaSkladowa],
+      ['Premia za sprzęt europejski', premiaEuropejska],
+      ['Magazyn ciepła', magazynCieplaKwota],
+    ];
+    for (const [nazwa, kwota] of pozycje) {
+      const li = document.createElement('li');
+      li.className = 'flex justify-between';
+      li.innerHTML = `<span>${nazwa}</span><span class="font-medium text-slate-800">${fmt(kwota)}</span>`;
+      rozbicieEl.appendChild(li);
+    }
+
+    if (warunekSpelniony) {
+      warunekEl.className = 'rounded-xl p-4 text-sm font-body mb-4 bg-brand-light text-brand-secondary';
+      warunekEl.textContent = `Warunek pojemności spełniony (min. ${minWymagana} kWh dla ${moc} kWp).`;
+    } else {
+      warunekEl.className = 'rounded-xl p-4 text-sm font-body mb-4 bg-orange-50 text-orange-800 border border-orange-200';
+      warunekEl.textContent = `Magazyn za mały — przy ${moc} kWp potrzebujesz minimum ${minWymagana} kWh, żeby się zakwalifikować (masz ${pojemnosc} kWh).`;
+    }
+
+    if (!warunekSpelniony) {
+      limitEl.textContent = '';
+    } else if (dotacjaFinalna >= PME2.maxDotacja) {
+      limitEl.textContent = `Zadziałał limit maksymalnej dotacji na punkt poboru (${fmt(PME2.maxDotacja)}).`;
+    } else if (dotacjaFinalna === limit30 && limit30 < sumaSkladowych) {
+      limitEl.textContent = `Zadziałał limit ${PME2.procentKosztow * 100}% kosztów kwalifikowanych.`;
+    } else {
+      limitEl.textContent = 'To suma składowych bez dodatkowych ograniczeń.';
+    }
+
+    if (zglosUzycie) zglosUzycieKalkulatora();
+  }
+
+  [mocInput, pojemnoscInput, europejskiInput, cieploInput, kosztInput].forEach((el) => {
+    el.addEventListener('input', () => przelicz(true));
+  });
+
+  fallback.classList.add('hidden');
+  interaktywny.hidden = false;
+  przelicz(false);
+</script>

@@ -2,7 +2,7 @@
 const faqs = [
   {
     q: "Ile kosztuje instalacja fotowoltaiczna?",
-    a: "Cena zależy od mocy instalacji i typu dachu. Typowy zestaw fotowoltaika + magazyn energii dla domu jednorodzinnego to koszt od ok. 25 000 PLN. Dzięki dofinansowaniom (Mój Prąd, Czyste Powietrze) możesz odzyskać nawet połowę kosztów. Zamów bezpłatną wycenę — przeliczymy dla Ciebie."
+    a: "Cena zależy od mocy instalacji i typu dachu. Typowy zestaw fotowoltaika + magazyn energii dla domu jednorodzinnego to koszt od ok. 25 000 PLN. Dzięki dofinansowaniom (PME2, Czyste Powietrze) możesz odzyskać sporą część kosztów. Zamów bezpłatną wycenę — przeliczymy dla Ciebie."
   },
   {
     q: "Jak długo trwa montaż?",
@@ -10,7 +10,11 @@ const faqs = [
   },
   {
     q: "Jakie dofinansowania mogę otrzymać?",
-    a: "Aktualnie dostępne programy to Mój Prąd (do 28 000 PLN na instalację z magazynem energii), Czyste Powietrze (dotacja + preferencyjny kredyt) oraz ulga termomodernizacyjna (odliczenie od podatku do 53 000 PLN). Pomagamy złożyć wnioski — wszystko załatwimy za Ciebie."
+    a: 'Aktualnie dostępne programy to <a href="/dotacje/przydomowe-magazyny-energii-2026" class="text-brand-primary underline hover:no-underline">PME2</a> (do 19 000 zł na magazyn energii, nabór jeszcze się nie rozpoczął), Czyste Powietrze (dotacja + preferencyjny kredyt) oraz ulga termomodernizacyjna (odliczenie od podatku do 53 000 PLN). Pomagamy złożyć wnioski — wszystko załatwimy za Ciebie.'
+  },
+  {
+    q: "Kiedy ruszy nabór na dotacje do magazynu energii (PME2)?",
+    a: 'Nabór w programie Przydomowe Magazyny Energii część 2 jest planowany na III kwartał 2026 — dokładna data nie została jeszcze potwierdzona przez NFOŚiGW. Na <a href="/dotacje/przydomowe-magazyny-energii-2026" class="text-brand-primary underline hover:no-underline">stronie o PME2</a> możesz sprawdzić aktualny status i zostawić kontakt, żebyśmy napisali do Ciebie w dniu startu naboru.'
   },
   {
     q: "Czy panele działają zimą i w pochmurne dni?",
@@ -39,7 +43,7 @@ const faqs = [
             </svg>
           </summary>
           <div class="px-5 sm:px-6 pb-5 sm:pb-6">
-            <p class="font-body text-slate-600 text-sm leading-relaxed">{faq.a}</p>
+            <p class="font-body text-slate-600 text-sm leading-relaxed" set:html={faq.a} />
           </div>
         </details>
       ))}

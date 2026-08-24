@@ -2,12 +2,30 @@
 interface Props {
   title?: string;
   description?: string;
+  canonicalPath?: string;
+  ogImage?: string;
 }
 
 const {
   title = "DoradcyPV — Niezależni eksperci od fotowoltaiki",
-  description = "Obniż rachunki za prąd nawet o 90%. Fotowoltaika z magazynem energii dla domów jednorodzinnych. Wielkopolska, Kujawy, Pomorze. Bezpłatna wycena w 24h."
+  description = "Obniż rachunki za prąd nawet o 90%. Fotowoltaika z magazynem energii dla domów jednorodzinnych. Wielkopolska, Kujawy, Pomorze. Bezpłatna wycena w 24h.",
+  canonicalPath,
+  ogImage
 } = Astro.props;
+
+const canonicalURL = new URL(canonicalPath ?? Astro.url.pathname, Astro.site);
+const ogImageURL = ogImage ? new URL(ogImage, Astro.site).toString() : undefined;
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "DoradcyPV",
+  legalName: "HONESTO Kinga Różańska",
+  url: "https://doradcypv.pl",
+  logo: "https://doradcypv.pl/logo.png",
+  email: "kontakt@doradcypv.pl",
+  areaServed: ["Wielkopolskie", "Kujawsko-Pomorskie", "Pomorskie"],
+};
 ---
 
 <!doctype html>
@@ -16,6 +34,7 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
 
     <link rel="icon" type="image/png" href="/favicon.png" />
 
@@ -30,6 +49,8 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pl_PL" />
+    <meta property="og:url" content={canonicalURL} />
+    {ogImageURL && <meta property="og:image" content={ogImageURL} />}
 
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -37,6 +58,8 @@ const {
     <style is:global>
       @import "../styles/global.css";
     </style>
+
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
 
     <!-- Meta Pixel Code -->
     <script>

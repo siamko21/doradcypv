@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import KalkulatorDotacji from '../../components/KalkulatorDotacji.astro';
+import FormularzPowiadomienie from '../../components/FormularzPowiadomienie.astro';
+import { PME2 } from '../../config/dotacje';
+
+const statusOpis = {
+  'przed naborem': {
+    etykieta: 'Nabór jeszcze się nie rozpoczął',
+    kolor: 'bg-orange-50 text-orange-800 border-orange-200',
+    tresc: `Nabór wniosków jest planowany na ${PME2.naborPlanowany}. NFOŚiGW nie potwierdził jeszcze dokładnej daty startu — jak tylko formularz wniosku (GWD) zostanie uruchomiony, zaktualizujemy tę stronę. Zostaw kontakt poniżej, żebyśmy napisali do Ciebie w dniu startu.`,
+  },
+  'nabor trwa': {
+    etykieta: 'Nabór trwa',
+    kolor: 'bg-brand-light text-brand-secondary border-brand-primary/30',
+    tresc: 'Nabór wniosków jest aktualnie otwarty. Wnioski składa się elektronicznie przez Generator Wniosków o Dofinansowanie (GWD) na koncie z profilem zaufanym lub e-dowodem.',
+  },
+  zamkniety: {
+    etykieta: 'Nabór zamknięty',
+    kolor: 'bg-stone-100 text-slate-600 border-stone-300',
+    tresc: 'Nabór wniosków w tej edycji programu został zamknięty (wyczerpanie budżetu lub upłynięty termin). Skontaktuj się z nami, żeby dowiedzieć się o kolejnych edycjach lub alternatywnych programach.',
+  },
+}[PME2.status];
+
+const faqItems = [
+  {
+    q: 'Kiedy rusza nabór wniosków w programie PME2?',
+    a: `Zgodnie z oficjalną stroną programu (przydomowemagazyny.gov.pl) nabór jest planowany na ${PME2.naborPlanowany}. Dokładna data nie została jeszcze potwierdzona — wcześniejsza zapowiedź konkretnego terminu została przez NFOŚiGW wycofana, dlatego nie podajemy tu daty dziennej, dopóki nie pojawi się ona na stronie rządowej.`,
+  },
+  {
+    q: 'Ile pieniędzy mogę dostać z PME2?',
+    a: `Maksymalnie ${PME2.maxDotacja.toLocaleString('pl-PL')} zł na jeden punkt poboru energii (PPE), w tym do ${PME2.skladowe.magazynEnergii.toLocaleString('pl-PL')} zł na magazyn energii, ${PME2.skladowe.premiaSprzetEuropejski.toLocaleString('pl-PL')} zł premii za sprzęt produkcji europejskiej i ${PME2.skladowe.magazynCiepla.toLocaleString('pl-PL')} zł na magazyn ciepła. Dotacja pokrywa maksymalnie ${PME2.procentKosztow * 100}% kosztów kwalifikowanych.`,
+  },
+  {
+    q: 'Kto może złożyć wniosek?',
+    a: 'Osoby fizyczne będące prosumentami — czyli mające przyłączoną do sieci mikroinstalację OZE (np. fotowoltaikę) i umowę kompleksową z zakładem energetycznym.',
+  },
+  {
+    q: 'Jakie warunki techniczne musi spełnić magazyn energii?',
+    a: `Pojemność magazynu (w Wh) musi wynosić co najmniej dwukrotność mocy zainstalowanej instalacji PV (w Wp), a jednocześnie nie mniej niż ${PME2.minPojemnoscMagazynuKWh} kWh. To warunek konieczny — magazyn, który go nie spełnia, nie kwalifikuje się do dotacji niezależnie od pozostałych parametrów.`,
+  },
+  {
+    q: 'Od kiedy liczą się koszty kwalifikowane?',
+    a: `Koszty kwalifikowane to te poniesione od ${new Date(PME2.kosztyKwalifikowaneOd).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}. Wcześniejsze zakupy nie zostaną rozliczone w tym programie.`,
+  },
+  {
+    q: 'Jakie dokumenty trzeba przygotować do wniosku?',
+    a: 'Zgodnie z zapowiedzianą listą (elektronicznie, w formacie PDF/JPG): faktura zakupu, potwierdzenie płatności, zaświadczenie OSD z numerem PPE, protokół odbioru prac, dokumentacja fotograficzna urządzeń z tabliczkami znamionowymi, karta produktu/etykieta energetyczna, potwierdzenie rachunku bankowego do wypłaty, ewentualne pełnomocnictwo oraz oświadczenie DNSH. Ostateczna lista zostanie potwierdzona w regulaminie naboru — pomożemy Ci ją skompletować.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<BaseLayout
+  title="PME2 — dotacja do magazynu energii 2026 | DoradcyPV"
+  description={`Nabór w programie Przydomowe Magazyny Energii część 2 (PME2): ${PME2.naborPlanowany}. Do ${PME2.maxDotacja.toLocaleString('pl-PL')} zł dotacji na magazyn energii. Sprawdź warunki i policz swoją dotację.`}
+  canonicalPath="/dotacje/przydomowe-magazyny-energii-2026"
+  ogImage="/og/pme2.jpg"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <Nav />
+
+  <main class="min-h-screen bg-gray-50 pt-24 pb-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <a href="/" class="inline-flex items-center gap-2 text-brand-primary font-body text-sm font-medium hover:text-brand-secondary transition-colors mb-6">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        Wróć na stronę główną
+      </a>
+
+      <p class="font-body text-xs text-slate-500 mb-3">
+        Ostatnia aktualizacja: {new Date(PME2.ostatniaAktualizacja).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}
+      </p>
+
+      <h1 class="font-heading font-extrabold text-3xl sm:text-4xl text-brand-dark mb-4">
+        PME2: dotacja do magazynu energii — {PME2.naborPlanowany}
+      </h1>
+      <p class="font-body text-slate-600 text-base leading-relaxed mb-8">
+        Przydomowe Magazyny Energii (część 2) to następca programu Mój Prąd — dotacja do magazynu
+        energii, magazynu ciepła i premii za sprzęt europejski dla właścicieli instalacji
+        fotowoltaicznych. Poniżej rzeczowe odpowiedzi na najważniejsze pytania, bez marketingowego
+        napuszenia — ta strona ma Ci pomóc zdecydować, zanim zadzwonisz do handlowca.
+      </p>
+
+      <!-- Status naboru -->
+      <div class={`rounded-2xl border p-6 sm:p-8 mb-8 ${statusOpis.kolor}`}>
+        <p class="font-heading font-bold text-lg mb-2">{statusOpis.etykieta}</p>
+        <p class="font-body text-sm leading-relaxed">{statusOpis.tresc}</p>
+      </div>
+
+      <!-- Konkretne odpowiedzi -->
+      <div class="bg-white rounded-2xl border border-stone-200 shadow-sm divide-y divide-stone-100 mb-8">
+        {faqItems.map((item, i) => (
+          <div class="p-6 sm:p-8">
+            <h2 class="font-heading font-bold text-lg text-brand-dark mb-3 flex items-center gap-2">
+              <span class="inline-flex items-center justify-center w-7 h-7 bg-brand-light text-brand-primary rounded-full text-sm font-bold shrink-0">{i + 1}</span>
+              {item.q}
+            </h2>
+            <p class="font-body text-slate-600 text-sm leading-relaxed">{item.a}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Tabelka rozbicia kwoty -->
+      <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 sm:p-8 mb-8">
+        <h2 class="font-heading font-bold text-lg text-brand-dark mb-4">Rozbicie maksymalnej kwoty</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <tbody>
+              <tr class="border-b border-stone-100">
+                <td class="py-3 font-body text-slate-600">Magazyn energii (do {PME2.stawkaMagazynEnergiiZaKWh} zł/kWh)</td>
+                <td class="py-3 font-body text-right font-semibold text-brand-dark">{PME2.skladowe.magazynEnergii.toLocaleString('pl-PL')} zł</td>
+              </tr>
+              <tr class="border-b border-stone-100">
+                <td class="py-3 font-body text-slate-600">Premia za sprzęt produkcji europejskiej</td>
+                <td class="py-3 font-body text-right font-semibold text-brand-dark">{PME2.skladowe.premiaSprzetEuropejski.toLocaleString('pl-PL')} zł</td>
+              </tr>
+              <tr class="border-b border-stone-100">
+                <td class="py-3 font-body text-slate-600">Magazyn ciepła (min. {PME2.minPojemnoscMagazynuCieplaDm3} dm³, nośnik woda)</td>
+                <td class="py-3 font-body text-right font-semibold text-brand-dark">{PME2.skladowe.magazynCiepla.toLocaleString('pl-PL')} zł</td>
+              </tr>
+              <tr>
+                <td class="py-3 font-heading font-bold text-brand-dark">Razem maksymalnie na PPE</td>
+                <td class="py-3 font-heading text-right font-extrabold text-brand-primary text-lg">{PME2.maxDotacja.toLocaleString('pl-PL')} zł</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="font-body text-xs text-slate-500 mt-4">
+          Zawsze do {PME2.procentKosztow * 100}% kosztów kwalifikowanych poniesionych od {new Date(PME2.kosztyKwalifikowaneOd).toLocaleDateString('pl-PL')} — nawet jeśli suma składowych jest wyższa, dotacja nie przekroczy tego limitu.
+        </p>
+      </div>
+
+      <p class="font-body text-sm text-slate-600 mb-12">
+        To skrót najważniejszych zasad, nie regulamin programu. Pełne, wiążące warunki znajdziesz
+        na oficjalnej stronie rządowej:
+        {' '}
+        <a href={PME2.zrodloUrl} target="_blank" rel="noopener noreferrer" class="text-brand-primary underline hover:no-underline">
+          {PME2.zrodloUrl}
+        </a>
+      </p>
+    </div>
+
+    <KalkulatorDotacji />
+    <FormularzPowiadomienie />
+  </main>
+
+  <Footer />
+</BaseLayout>
